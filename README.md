@@ -41,64 +41,68 @@ export interface Product {
     imageUrl: string;
     createdAt: string;   // 存储为 ISO 字符串，以确保 Redux 状态可序列化
 }
+```
 
-核心功能点及实现细节
-1. 客户端高性能数据处理
+### 核心功能点及实现细节
+####  1. 客户端高性能数据处理
+```
 集中计算： 所有筛选、排序和分页逻辑集中在 productListSlice.ts 内部，确保状态更新的一致性和高效性。
 
 核心 Selector： 使用自定义 Selector (selectProductById) 和 Redux 内部的计算逻辑，根据 filters 和 sort 状态实时计算出要展示的商品列表 (displayProducts)。
-
-2. 用户体验与优化
+```
+#### 2. 用户体验与优化
+```
 筛选防抖 (Debounce)： 对关键词输入和价格滑块拖动使用了自定义 useDebounce Hook。这极大地减少了用户快速操作时触发的 Redux Action 和高耗时计算，保证了列表渲染的流畅性。
 
 多维度排序： 支持按 价格、销量、评分、上架时间 等多个字段进行升序/降序切换排序。
-
+```
 
 # 环境说明与运行指南 
 本项目是使用现代前端工具链构建的，确保您的开发环境满足以下要求：
 
-🛠️ 环境要求
+## 环境要求
 Node.js: 推荐版本 20.x (LTS) 或更高版本。
 
 npm: 推荐版本 8.x 或更高版本。
 
 Git: 用于版本控制和克隆项目代码。
 
-🚀 运行指南
+## 运行指南
 请按照以下步骤启动本地开发环境：
 
-步骤 1: 克隆项目仓库
+### 步骤 1: 克隆项目仓库
 打开你的终端或命令行工具，将项目代码克隆到本地：
-
+```
 Bash
-
 git clone [YOUR_REPOSITORY_URL]
 cd [project-folder-name]
-步骤 2: 安装依赖包
+```
+### 步骤 2: 安装依赖包
+```
 使用 npm 或 yarn 安装项目所需的所有依赖：
-
 Bash
-
-# 使用 npm
+使用 npm
 npm install
-
 # 或使用 yarn
-# yarn install
-步骤 3: 启动开发服务器
+ yarn install
+```
+### 步骤 3: 启动开发服务器
 执行以下命令启动开发服务器。项目将自动在你的默认浏览器中打开，通常是 http://localhost:5173/。
-
 Bash
 
-# 启动开发模式 (使用 Vite 或类似的打包工具)
+### 启动开发模式 (使用 Vite 或类似的打包工具)
+```
 npm run dev
-
-# 或
-# yarn dev
-步骤 4: 构建生产环境 (可选)
+或
+yarn dev
+```
+### 步骤 4: 构建生产环境 (可选)
+```
 如果你需要生成用于生产部署的优化代码，可以运行构建命令：
 
 Bash
 
 npm run build
-# 或
-# yarn build
+或
+yarn build
+```
