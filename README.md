@@ -56,18 +56,16 @@ export interface Product {
 
 ✨ 如何运行
 克隆仓库：
-
 Bash
 
 git clone [你的仓库地址]
-安装依赖：
 
+安装依赖：
 Bash
 
 npm install
 # 或 yarn install
 启动项目：
-
 Bash
 
 npm run dev
