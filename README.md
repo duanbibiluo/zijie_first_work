@@ -18,7 +18,9 @@
 
 ## 📂 项目目录结构
 
-项目的核心逻辑围绕 `app`、`features` 和 `pages` 划分，实现清晰的分层架构。
+项目的核心逻辑围绕 `app`、`features`、`components`和 `pages` 划分，实现清晰的分层架构。
+<img width="505" height="330" alt="image" src="https://github.com/user-attachments/assets/7b21dc2d-c491-492d-a4f0-a0cf86127726" />
+
 
 ---
 
