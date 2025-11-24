@@ -64,6 +64,14 @@ export interface Product {
 优雅的 UI 展示：详情页 (ProductDetailPage.tsx) 使用 Ant Design 的 Row/Col 和 Descriptions 组件，以专业、美观的布局展示商品的大图、价格、评分、销量和详细属性。
 ```
 ---
+#### 4. 购物车商品添加与结算
+```
+状态隔离与集中管理： 新建独立的 cartSlice.ts 模块，专门负责管理购物车状态（items 数组），确保购物车逻辑与商品列表逻辑相互独立。
+
+实时数量与增减控： 购物车图标（CartIcon.tsx）通过 Redux Selector 实时显示商品总数量。在抽屉面板中集成 InputNumber 控件和 removeItem Action，支持用户在不离开页面的情况下增减和移除商品。
+
+结算与清空机制： 实现 handleCheckout 逻辑，点击“立即结算”时，通过 dispatch(clearCart()) 派发 Action 清空购物车状态，并提供即时反馈。
+```
 
 # 环境说明与运行指南 
 本项目是使用现代前端工具链构建的，确保您的开发环境满足以下要求：
