@@ -115,8 +115,16 @@ const ProductFilters: React.FC = () => {
             brand: [],
             rating: 0,
         };
+
+        // 同步更新本地状态
+        setLocalSearchTerm('');
+        setLocalPriceRange([0, 1000]);
+        setLocalRating(0);
+
+        // 派发 Redux action
         dispatch(setFilters(defaultFilters));
     };
+
 
     // --- 渲染 UI ---
     return (
