@@ -1,4 +1,4 @@
-// src/pages/ProductDetailPage.tsx (最终优化版 - 包含返回按钮)
+// src/pages/ProductDetailPage.tsx 
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // 引入 useNavigate
 import { Row, Col, Card, Typography, Descriptions, Divider, Tag, Space, Alert, Button } from 'antd'; // 引入 Button
@@ -129,5 +129,6 @@ const ProductDetailPage: React.FC = () => {
         </div>
     );
 };
+
 
 export default ProductDetailPage;
