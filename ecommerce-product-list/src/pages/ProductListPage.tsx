@@ -1,7 +1,7 @@
-// src/pages/ProductListPage.tsx
+// src/pages/ProductListPage.tsx (集成购物车按钮)
 
 import React, { useEffect,  useCallback } from 'react';
-import {Row, Col, Typography, Card, Pagination, Select, Space, Divider, Button} from 'antd';
+import {Row, Col, Typography, Card, Pagination, Select, Space, Divider, Button, Tag} from 'antd'; // 引入 Tag
 import { ArrowUpOutlined, ArrowDownOutlined, FireOutlined, StarOutlined } from '@ant-design/icons';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import {
@@ -9,9 +9,10 @@ import {
     setCurrentPage,
     setSort,
 } from '../features/productList/productListSlice';
-import type { ProductListState } from '../features/productList/types';
+import type { ProductListState, Product } from '../features/productList/types'; // 确保 Product 类型被导入
 import ProductFilters from "../components/ProductFilters";
 import { useNavigate } from 'react-router-dom';
+import AddToCartButton from '../components/AddToCartButton'; // 🚀 导入购物车按钮组件
 
 const { Title, Text } = Typography;
 const { Option } = Select;
@@ -31,9 +32,12 @@ const SORT_OPTIONS: SortOption[] = [
     { label: '评分', value: 'rating', defaultOrder: 'desc' },
 ];
 
+
+// ------------------------------------------------------------------------------------------------
+
 const ProductListPage: React.FC = () => {
     const dispatch = useAppDispatch();
-    const navigate = useNavigate(); //
+    const navigate = useNavigate();
 
     // 1. 从 Redux 一次性读取所有需要的状态
     const {
@@ -60,40 +64,114 @@ const ProductListPage: React.FC = () => {
 
     // 4. 处理排序变化 (UI 交互)
     const handleSortChange = useCallback((value: ProductListState['sortBy']) => {
-        // 找到选中的排序字段的默认排序方向
         const selectedOption = SORT_OPTIONS.find(opt => opt.value === value);
         const newSortOrder = selectedOption ? selectedOption.defaultOrder : 'desc';
 
-        // 只有当选择的字段与当前字段不同时才应用新的排序方向，否则重置为默认方向
         dispatch(setSort({
             sortBy: value,
-            sortOrder: newSortOrder // 切换排序字段时，使用默认方向
+            sortOrder: newSortOrder
         }));
     }, [dispatch]);
 
 
     // 5. 处理排序方向切换 (升序/降序)
     const handleOrderToggle = useCallback(() => {
-        // 只有当当前排序字段不是 'default' 时才允许切换方向
         if (sortBy === 'default') return;
 
         const newSortOrder: ProductListState['sortOrder'] = sortOrder === 'desc' ? 'asc' : 'desc';
 
         dispatch(setSort({
-            sortBy: sortBy, // 保持当前排序字段
-            sortOrder: newSortOrder // 切换方向
+            sortBy: sortBy,
+            sortOrder: newSortOrder
         }));
     }, [dispatch, sortBy, sortOrder]);
 
 
-    // --- 提前返回 (Early Returns) ---
+    // 6. 渲染逻辑 (JSX)
     if (loading) return <Title level={4} style={{ textAlign: 'center', padding: 50 }}>商品加载中...</Title>;
     if (error) return <Title level={4} type="danger" style={{ textAlign: 'center', padding: 50 }}>加载错误: {error}</Title>;
 
 
-    // 6. 渲染逻辑 (JSX)
+    const renderProductCard = (product: Product) => {
+        // 🚀 注意：阻止点击 Card 跳转到详情页
+        const handleCardClick = (e: React.MouseEvent) => {
+            // 避免点击购物车按钮时触发跳转
+            if ((e.target as HTMLElement).closest('button')) {
+                return;
+            }
+            navigate(`/product/${product.id}`);
+        };
+
+        return (
+            <Card
+                key={product.id}
+                hoverable
+                // 修正: 确保点击 Card 跳转，但要排除子元素的点击事件（如按钮）
+                onClick={handleCardClick}
+                cover={
+                    <div style={{ height: 200, overflow: 'hidden' }}>
+                        <img
+                            alt={product.name}
+                            src={product.imageUrl}
+                            style={{ width: '100%', display: 'block' }}
+                        />
+                    </div>
+                }
+                style={{ height: '100%', display: 'flex', flexDirection: 'column' }}
+                bodyStyle={{ flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+            >
+                <Card.Meta
+                    title={<Text ellipsis={{ tooltip: product.name }}>{product.name}</Text>}
+                    description={
+                        <Space direction="vertical" style={{ width: '100%' }}>
+                            {/* 价格和基本信息 */}
+                            <Text type="danger" style={{ fontSize: '1.2em', fontWeight: 'bold' }}>
+                                ¥{product.price.toFixed(2)}
+                            </Text>
+                            <Row justify="space-between">
+                                <Col>
+                                    <Space size={4}>
+                                        <StarOutlined style={{ color: '#ffc107' }} />
+                                        <Text type="secondary">{product.rating.toFixed(1)}</Text>
+                                    </Space>
+                                </Col>
+                                <Col>
+                                    <Space size={4}>
+                                        <FireOutlined style={{ color: '#ff4d4f' }} />
+                                        <Text type="secondary">{product.sales} 销量</Text>
+                                    </Space>
+                                </Col>
+                            </Row>
+                        </Space>
+                    }
+                />
+
+                {/* 🚀 新增：操作区域 (添加到购物车) */}
+                <Divider style={{ margin: '12px 0 8px 0' }} />
+                <Row justify="space-between" align="middle">
+                    <Col>
+                        {/* 保持库存显示 */}
+                        <Tag color={product.inStock ? 'green' : 'red'}>
+                            {product.inStock ? '有货' : '缺货'}
+                        </Tag>
+                    </Col>
+                    <Col>
+                        {/* 嵌入购物车按钮 */}
+                        <AddToCartButton
+                            productId={product.id}
+                            productName={product.name}
+                        />
+                    </Col>
+                </Row>
+                {/* 🚀 结束新增 */}
+
+            </Card>
+        );
+    };
+
+
     return (
-        <Row gutter={[24, 24]} style={{ width: '1600px', padding: '24px 0' }}>
+        <Row gutter={[24, 24]} style={{ padding: '24px 0' }}>
             {/* 侧边栏：筛选器 (占 6 份) */}
             <Col xs={24} sm={8} md={6}>
                 <Card title="商品筛选" bordered={false}>
@@ -122,9 +200,7 @@ const ProductListPage: React.FC = () => {
                                 size="large"
                             >
                                 {SORT_OPTIONS.map(opt => (
-                                    <Option key={opt.value} value={opt.value}>
-                                        {opt.label}
-                                    </Option>
+                                    <Option key={opt.value} value={opt.value}>{opt.label}</Option>
                                 ))}
                             </Select>
 
@@ -148,50 +224,7 @@ const ProductListPage: React.FC = () => {
                     {displayProducts.length > 0 ? (
                         displayProducts.map(product => (
                             <Col key={product.id} xs={24} sm={12} lg={8} xl={6}>
-                                <Card
-                                    hoverable
-                                    // 🚀 修正 1: 将 onClick、cover 和 style 放在属性列表中
-                                    onClick={() => {
-                                        console.log("🚀 跳转指令已发送:", `/product/${product.id}`); // 👈 增加日志
-                                        navigate(`/product/${product.id}`);
-                                    }}
-
-                                    cover={
-                                        <div style={{ height: 200, overflow: 'hidden' }}>
-                                            <img
-                                                alt={product.name}
-                                                src={product.imageUrl}
-                                                style={{ width: '100%', display: 'block' }}
-                                            />
-                                        </div>
-                                    }
-                                    style={{ height: '100%' }} // 🚀 修正 2: 确保 style 也是属性
-                                >
-                                    <Card.Meta
-                                        title={<Text ellipsis={{ tooltip: product.name }}>{product.name}</Text>}
-                                        description={
-                                            <Space direction="vertical" style={{ width: '100%' }}>
-                                                <Text type="danger" style={{ fontSize: '1.2em' }}>
-                                                    ¥{product.price.toFixed(2)}
-                                                </Text>
-                                                <Row justify="space-between">
-                                                    <Col>
-                                                        <Space size={4}>
-                                                            <StarOutlined style={{ color: '#ffc107' }} />
-                                                            <Text type="secondary">{product.rating.toFixed(1)}</Text>
-                                                        </Space>
-                                                    </Col>
-                                                    <Col>
-                                                        <Space size={4}>
-                                                            <FireOutlined style={{ color: '#ff4d4f' }} />
-                                                            <Text type="secondary">{product.sales} 销量</Text>
-                                                        </Space>
-                                                    </Col>
-                                                </Row>
-                                            </Space>
-                                        }
-                                    />
-                                </Card>
+                                {renderProductCard(product)}
                             </Col>
                         ))
                     ) : (
@@ -212,7 +245,7 @@ const ProductListPage: React.FC = () => {
                         pageSize={pageSize}
                         total={totalCount}
                         onChange={handlePageChange}
-                        showSizeChanger={false} // 可以开启以支持每页条数选择
+                        showSizeChanger={false}
                     />
                 </Row>
             </Col>

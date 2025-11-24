@@ -74,6 +74,8 @@ const ProductFilters: React.FC = () => {
     const handleSearchLocalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setLocalSearchTerm(e.target.value);
     };
+
+
     // Redux 派发逻辑由上面的 useEffect 负责
 
     // 分类选择处理：直接派发 Redux Action (不需要防抖)

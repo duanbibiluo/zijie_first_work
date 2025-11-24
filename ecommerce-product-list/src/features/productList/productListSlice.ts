@@ -142,3 +142,5 @@ export const selectProductById = (state: RootState, productId: number) => {
     // 逻辑：访问 productList 切片中的 allProducts 数组，然后查找匹配 ID 的商品
     return state.productList.allProducts.find(product => product.id === productId);
 };
+
+export const selectAllProducts = (state: RootState) => state.productList.allProducts;
