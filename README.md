@@ -56,6 +56,12 @@ export interface Product {
 
 多维度排序： 支持按 价格、销量、评分、上架时间 等多个字段进行升序/降序切换排序。
 ```
+#### 3. 商品详情页与导航
+```
+路由集成与数据获取：成功配置 /product/:id 路由，并使用 react-router-dom 的 useParams 获取 URL ID。通过 Redux Selector (selectProductById) 精确获取和展示单个商品的完整详情。
+
+优雅的 UI 展示：详情页 (ProductDetailPage.tsx) 使用 Ant Design 的 Row/Col 和 Descriptions 组件，以专业、美观的布局展示商品的大图、价格、评分、销量和详细属性。
+```
 
 # 环境说明与运行指南 
 本项目是使用现代前端工具链构建的，确保您的开发环境满足以下要求：
