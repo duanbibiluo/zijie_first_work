@@ -1,4 +1,4 @@
-// src/index.tsx 或 src/main.tsx (确保结构正确)
+//src/main.tsx 
 
 import React from 'react';
 import ReactDOM from 'react-dom/client';
