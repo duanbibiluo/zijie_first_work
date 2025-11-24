@@ -42,7 +42,6 @@ export interface Product {
     createdAt: string;   // 存储为 ISO 字符串，以确保 Redux 状态可序列化
 }
 ```
-
 ### 核心功能点及实现细节
 ####  1. 客户端高性能数据处理
 ```
@@ -62,9 +61,12 @@ export interface Product {
 
 优雅的 UI 展示：详情页 (ProductDetailPage.tsx) 使用 Ant Design 的 Row/Col 和 Descriptions 组件，以专业、美观的布局展示商品的大图、价格、评分、销量和详细属性。
 ```
+---
 
 # 环境说明与运行指南 
 本项目是使用现代前端工具链构建的，确保您的开发环境满足以下要求：
+
+---
 
 ## 环境要求
 Node.js: 推荐版本 20.x (LTS) 或更高版本。
@@ -73,6 +75,7 @@ npm: 推荐版本 8.x 或更高版本。
 
 Git: 用于版本控制和克隆项目代码。
 
+---
 ## 运行指南
 请按照以下步骤启动本地开发环境：
 
