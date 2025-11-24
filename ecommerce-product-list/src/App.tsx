@@ -1,8 +1,7 @@
 // src/App.tsx
-
 import React from 'react';
 import { Layout, Typography, theme } from 'antd';
-import ProductListPage from './pages/ProductListPage';
+import AppRoutes from './app/routes'; // 导入路由配置
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -14,26 +13,27 @@ const App: React.FC = () => {
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
-            {/* 头部区域：用于展示应用名称 */}
+
+            {/* 头部区域 */}
             <Header style={{ background: '#001529', padding: '0 50px' }}>
                 <Title level={3} style={{ color: 'white', margin: 0, lineHeight: '64px' }}>
-                    🛒 电商商品列表 (RTK + AntD 实践)
+                    🛒 电商商品列表
                 </Title>
             </Header>
 
-            {/* 内容区域：商品列表页面的核心区域 */}
+            {/* 内容区域 */}
             <Content style={{ padding: '0 50px' }}>
                 <div
                     style={{
                         padding: 24,
-                        minHeight: 'calc(100vh - 134px)', // 减去 Header 和 Footer 的高度
+                        minHeight: 'calc(100vh - 134px)',
                         background: colorBgContainer,
                         marginTop: 20,
                         borderRadius: 8
                     }}
                 >
-                    {/* 引入主页面组件 */}
-                    <ProductListPage />
+                    {/* 引入 AppRoutes 负责根据 URL 渲染列表或详情 */}
+                    <AppRoutes />
                 </div>
             </Content>
 
